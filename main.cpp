@@ -1,15 +1,17 @@
-#include "Display.h"
+﻿#include "Control.h"
+
 
 
 int main()
 {
-	string a = "fsdhfdjkahfajkfhskalhjkfahsfjk\n";
-	for (int i = 0; i < 10; i++)
-	{
-		cout << a ; 
-		setcolor(i);
-		PrintString(0, i, a, i);
-	}
+	FixConsoleWindow();
+	//Stat a;
+	//a.ControlStatistics();
+	Main b;
+	b.ControlMain();
+	//RoomInfo c;
+	//c.ControlRI();
+
 	system("pause");
 	return 0;
 }

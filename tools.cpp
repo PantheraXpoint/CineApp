@@ -54,7 +54,7 @@ void DynamicPrintString(int where_x, int where_y, vector<string> content, int co
 
 bool YN_Check_Box(int where_x, int where_y)
 {
-	setcursor(false, 0);
+	setcursor(false, 0); 
 	int x = where_x; int y = where_y;
 
 	string question = "Are you sure to continue?";
@@ -106,4 +106,67 @@ bool YN_Check_Box(int where_x, int where_y)
 	setcolor(15);
 
 	return !side;
+}
+
+void Draw::DrawBoard(int x, int y, int width, int height)
+{
+	string str1, str2, str3, str4; str1.push_back(char(218));
+	str2.push_back(char(179)); str3.push_back(char(195)); str4.push_back(char(192));
+	for (int i = 1; i < 4 * width; ++i)
+	{
+		if (i % 4 == 0 && i < 4 * width)
+		{
+			str1.push_back(char(194));
+			str2.push_back(char(179));
+			str3.push_back(char(197));
+			str4.push_back(char(193));
+		}
+		else
+		{
+			str1.push_back(char(196));
+			str2.push_back(' ');
+			str3.push_back(char(196));
+			str4.push_back(char(196));
+		}
+	}
+	str1.push_back(char(191)); str2.push_back(char(179));
+	str3.push_back(char(180)); str4.push_back(char(217));
+	vector <string> str;  str.push_back(str1);
+	for (int i = 1; i < 2 * height; ++i)
+	{
+		if (i % 2 == 0) str.push_back(str3);
+		else str.push_back(str2);
+	}
+	str.push_back(str4);
+	DynamicPrintString(x, y, str);
+	this->a.xmin = x; this->a.ymin = y;
+	this->height = height; this->width = width;
+}
+void DrawRec(int x, int y, int width, int height, int k)
+{
+	string str1, str2,str4; str1.push_back(char(218));
+	str2.push_back(char(179));  str4.push_back(char(192));
+	for (int i = 1; i < 4 * width; ++i)
+	{
+		str2.push_back(' ');
+		str1.push_back(char(196));
+		str4.push_back(char(196));
+	}
+	str1.push_back(char(191)); str2.push_back(char(179)); str4.push_back(char(217));
+	vector <string> str;  str.push_back(str1);
+	for (int i = 1; i < 2 * height; ++i)
+	{
+		//if (i % 2 == 0) str.push_back(str3);
+		//else str.push_back(str2);
+		str.push_back(str2);
+	}
+	str.push_back(str4);
+	DynamicPrintString(x, y, str,k);
+}
+
+Location Draw::getLocation()
+{
+	this->a.xmax = this->a.xmin + 4 * this->width;
+	this->a.ymax = this->a.ymin + 2 * this->height;
+	return this->a;
 }
