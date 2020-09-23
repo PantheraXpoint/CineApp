@@ -81,7 +81,7 @@ void MainScreen(Location &Title, Location& Sell, Location& Statistics, Location&
 // Film List and Search Screen
 void FilmListScreen()
 {
-
+	//hello my friend
 }
 
 // Room Detail Screen
