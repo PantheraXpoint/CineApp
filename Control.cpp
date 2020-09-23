@@ -50,10 +50,73 @@ void Main::ControlMain()
 	}
 }
 // Control ListFilm
-void ListFilm::ControlLF()
-{
-
+int ListFilm::UpdateCursor() {
+	int keyBoard = getKeyboard();
+	(keyBoard == 1) ? cursor -= 2 : // UP
+		(keyBoard == 2) ? cursor += 2 ://DOWN
+		(keyBoard == 3) ? cursor-- ://LEFT
+		(keyBoard == 4) ? cursor++ : cursor = cursor;//RIGHT
+	return cursor;
 }
+void ListFilm::DisplayListBox(int n) { //n: number of films =>1->n 
+
+	int cursor = UpdateCursor();
+	if (cursor >= List_first_film + 4) { List_first_film += 2; }
+	else if (cursor < List_first_film) { List_first_film -= 2; }
+
+	DisplayBox(true, Consoleheigth / 6, List_first_film, cursor == List_first_film);
+	DisplayBox(false, Consoleheigth / 6, List_first_film + 1, cursor == List_first_film + 1);
+	DisplayBox(true, Consoleheigth / 1.9, List_first_film + 2, cursor == List_first_film + 2);
+	DisplayBox(false, Consoleheigth / 1.9, List_first_film + 3, cursor == List_first_film + 3);
+	DisplayButton(cursor);
+}
+int ListFilm::getKeyboard() {
+	return keyBoard;
+}
+void ListFilm::Control()
+{
+	FilmListScreen();
+	int change = 0;
+	while (1) {
+		if (_kbhit()) {
+			int key = _getch();
+			switch (key) {
+			case 72:
+				change++;
+
+				keyBoard = Up;
+				break;
+			case 80:
+				change++;
+
+				keyBoard = Down;
+				break;
+			case 75:
+				change++;
+
+				keyBoard = Left;
+				break;
+			case 77:
+				change++;
+
+				keyBoard = Right;
+				break;
+			case 13:
+				change++;
+				keyBoard = Enter;
+				break;
+			case 8:
+				change++;
+				keyBoard = Back;
+				break;
+			default:break;
+			}
+		}
+		if (change) { FilmListScreen(); change--; }
+	}
+}
+
+
 // Control RoomInfo
 int RoomInfo::PressOption(int &i)
 {

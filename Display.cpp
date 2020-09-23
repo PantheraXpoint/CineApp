@@ -79,9 +79,82 @@ void MainScreen(Location &Title, Location& Sell, Location& Statistics, Location&
 }
 
 // Film List and Search Screen
+
+void DisplayBox(bool side, int posY, int filmth, bool highLight) {// create a box
+	(highLight) ? setcolor(10) : setcolor(15);
+	int width = (int)Consolewidth / 2 - Consolewidth * 5 / 100;
+	int height = (int)Consoleheigth / 3;
+	int posX;
+	posX = (side) ? Consolewidth / 4 - width / 2 : Consolewidth * 3 / 4 - width / 2;//side = true : left | side = false : right
+	go(posX, posY);
+	for (int i = 0; i < width; i++) {
+		cout << '-';
+	}
+	for (int i = 0; i < height; i++) {
+		go(posX, posY + i + 1);
+		cout << "|" << setw((int)width / 3 - 1) << "|" << setw((int)width - width / 3 + 1) << "|\n";
+	}
+	go(posX, posY + height + 1);
+	for (int i = 0; i < width; i++) {
+		cout << '-';
+	}
+	int posXfilm = 0;
+	int posYfilm = 0;
+
+	char** l = new char* [5];
+	l[0] = new char[4];
+	const char* p[6] = { "Name:" ,"Start:","End:", "Duration:", "Available slots:", "Desc:" };
+	for (int i = 0; i < 6; i++) {
+		if (i < 3) posXfilm = posX + width / 3;
+		else posXfilm = posX + 2 * width / 3;
+		go(posXfilm, posY + (i % 3 + 1) * height / 4);
+		cout << p[i];
+	}
+	go(posX + width / 6, posY + height / 2);
+	cout << filmth;
+}
+
+void DisplayButton(int _cursor) { // display UP DOWN RIGHT LEFT ...
+	int keyBoard = getKeyboard();
+	go(Consolewidth / 4 - 7, Consoleheigth * 92 / 100);
+	(keyBoard == 1) ? setcolor(10) : setcolor(15);
+	cout << setw(8) << "[^]";
+	setcolor(15);
+
+	go(Consolewidth / 4 - 7, Consoleheigth * 92 / 100 + 2);
+	(keyBoard == 3) ? setcolor(10) : setcolor(15);
+	cout << "[< ]";
+	(keyBoard == 2) ? setcolor(10) : setcolor(15);
+	cout << " [V]";
+	(keyBoard == 4) ? setcolor(10) : setcolor(15);
+	cout << " [> ]";
+	setcolor(15);
+	go(Consolewidth * 2 / 4 - 5, Consoleheigth * 92 / 100);
+	(keyBoard == 5) ? setcolor(10) : setcolor(15);
+	cout << ",--'-----|";
+	go(Consolewidth * 2 / 4 - 5, Consoleheigth * 92 / 100 + 1);
+	cout << "|  Enter |";
+	go(Consolewidth * 2 / 4 - 5, Consoleheigth * 92 / 100 + 2);
+	cout << "'--------|";
+	(keyBoard == 6) ? setcolor(10) : setcolor(15);
+	go(Consolewidth * 3 / 4 - 5, Consoleheigth * 92 / 100);
+	cout << ",-------,";
+	go(Consolewidth * 3 / 4 - 5, Consoleheigth * 92 / 100 + 1);
+	cout << "| <-    |";
+	go(Consolewidth * 3 / 4 - 5, Consoleheigth * 92 / 100 + 2);
+	cout << "'-,-----|";
+}
+//control and display
 void FilmListScreen()
 {
 	//hello my friend
+	const char* Title = "LIST FILM";
+	go(Consolewidth / 2 - strlen(Title) / 2, Consoleheigth / 10);
+	cout << Title;
+	int n = 10;// number of films
+	int i = 1;
+	DisplayListBox(n);
+
 }
 
 // Room Detail Screen

@@ -17,7 +17,19 @@ class ListFilm
 private:
 
 public:
-	void ControlLF();
+	enum Button {
+		Up = 1,
+		Down = 2,
+		Left = 3,
+		Right = 4,
+		Enter = 5,
+		Back = 6
+	};
+	static int keyBoard = 0;
+	int getKeyboard();
+	void Control();
+	int UpdateCursor();
+	void DisplayListBox(int n);//n: number of films =>1->n 
 
 };
 // Control RoomInfo

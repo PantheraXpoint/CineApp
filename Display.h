@@ -13,6 +13,11 @@ void MainScreen(Location& Title, Location& Sell, Location& Statistics, Location&
 
 // Film List and Search Screen ///// TRI HUYNH
 void FilmListScreen();
+//for DISPLAY
+void DisplayBox(bool side, int posY, int filmth, bool highLight);
+void DisplayButton(int _cursor);
+void FilmListScreen();
+
 
 // Room Detail Screen
 void Border();
