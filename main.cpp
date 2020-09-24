@@ -1,17 +1,13 @@
-﻿#include "Control.h"
+﻿#include "Operation.h"
 
-
+int Shot::ShotNumcounter = 1;
+int Film::RoomIDcounter = 1;
 
 int main()
 {
 	FixConsoleWindow();
-	//Stat a;
-	//a.ControlStatistics();
-	Main b;
-	b.ControlMain();
-	//RoomInfo c;
-	//c.ControlRI();
-
+	operation();
+	
 	system("pause");
 	return 0;
 }

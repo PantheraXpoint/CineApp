@@ -1,21 +1,27 @@
 #include "Display.h"
 
 // Control MainScreen
-
+static int cursor = 1;
+static int List_first_film = 1;
 class Main
 {
 private:
-
+	int SwitchScreen = 0;
+	int i = -1;
 public:
-	int PressOption(int &i);
+	void PressOption(int &i);
 	void SwitchChoice(Location& Sell, Location& Statistics, Location& Updates, int &i);
-	void ControlMain();
+	void ControlMain(int& A);
+	int getSCindex();
+	int getI();
+	int result();
 };
 // Control ListFilm  //////// Tri Huynh
 class ListFilm
 {
 private:
-
+	int keyBoard = 0;
+	int SwitchScreen = 0;
 public:
 	enum Button {
 		Up = 1,
@@ -25,40 +31,47 @@ public:
 		Enter = 5,
 		Back = 6
 	};
-	static int keyBoard = 0;
+	void PressOption(int& i);
 	int getKeyboard();
-	void Control();
+	void Control(int &A);
 	int UpdateCursor();
 	void DisplayListBox(int n);//n: number of films =>1->n 
-
+	void FilmListScreen();
+	int getSCindex();
+	int result();
 };
 // Control RoomInfo
 class RoomInfo
 {
 private:
-
+	int SwitchScreen = 0;
 public:
-	int PressOption(int &i);
+	void PressOption(int &i);
 	int MoveCursor(int& x, int& y, Location b);
 	void Cursor(Draw A[], int index);
 	void Avail_slots();
 	void ChooseSlot();
 	void SwitchShot();
-	void ControlRI();
+	void ControlRI(int& A);
+	int getSCindex();
+	int result();
 };
 
 // Control Statistics
 class Stat
 {
 private:
-
+	int SwitchScreen = 0;
 public:
-	int PressOption(int& i);
+	void PressOption(int& i);
 	void SwitchBar();
 	void DetailStat();
 	void GeneralStat();
-	void ControlStatistics();
+	void ControlStatistics(int &A);
+	int getSCindex();
+	int result();
 };
+
 
 // Control Update
 class Update

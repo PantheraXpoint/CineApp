@@ -12,12 +12,9 @@ void RoomUpdatesIcon(Location a, int = 7);
 void MainScreen(Location& Title, Location& Sell, Location& Statistics, Location& Updates);
 
 // Film List and Search Screen ///// TRI HUYNH
-void FilmListScreen();
-//for DISPLAY
+//void FilmListScreen();
 void DisplayBox(bool side, int posY, int filmth, bool highLight);
-void DisplayButton(int _cursor);
-void FilmListScreen();
-
+void DisplayButton(int _cursor, int KeyBoard);
 
 // Room Detail Screen
 void Border();

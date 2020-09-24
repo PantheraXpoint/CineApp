@@ -11,38 +11,53 @@
 
 using namespace std;
 
+enum Screen
+{
+	Blank = 0,
+	mainscreen = 1,
+	FilmList = 2,
+	Statistics = 3,
+	Update = 4,
+	roomInfo = 5
+};
 struct Location
 {
 	int xmin, ymin;
 	int xmax, ymax;
 };
 
-struct Time
+struct Seat
 {
-	int hour, minute;
+	int x, y;
 };
+
 struct Shot
 {
+	vector<Seat> seat; 
+	static int ShotNumcounter;
 	int ShotNum;
-	Time Start, End;
-	int avail_slots;
-	bool seat[10][20];
+	int startHour = 0;
+	int endHour = 0;
+	const int slots = 351;
+	Shot() : ShotNum (ShotNumcounter++) {}
+	int getAvail_slots()
+	{
+		return this->slots - seat.size();
+		
+	}
 };
 
 struct Film
 {
+	Shot FilmShot[5];
 	string FilmName;
-	float Price;
 	string Description;
 	int Duration;
+	static int RoomIDcounter;
+	int RoomID;
+	Film() : RoomID(RoomIDcounter++) {}
 };
 
-struct Room
-{
-	Film Movie;
-	int ID;
-	Shot *Current;
-};	
 
 /*
 	maximize console screen, call at the beginning of program

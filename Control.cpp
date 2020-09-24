@@ -2,14 +2,16 @@
 
 // Control MainScreen
 
-int Main::PressOption(int &i)
+void Main::PressOption(int &i)
 {
 	char k; k = _getch();
 	if (k == 'a' || (int)k == 75) i -= 1;
 	if (k == 'd' || (int)k == 77) i += 1;
 	if (i < 0) i = 2;
 	if (i > 2) i = 0;
-	return 0;
+	if ((int)k == 13) this->SwitchScreen = 1;
+	else if ((int)k == 27) this->SwitchScreen = -1;
+	else this->SwitchScreen = 0;
 }
 void Main::SwitchChoice(Location& Sell, Location& Statistics, Location& Updates, int &i)
 {
@@ -36,20 +38,44 @@ void Main::SwitchChoice(Location& Sell, Location& Statistics, Location& Updates,
 		}
 	}
 }
-void Main::ControlMain()
+void Main::ControlMain(int& A)
 {
 	Location Title, Sell, Statistics, Updates;
 	MainScreen(Title, Sell, Statistics, Updates); 
-	int i = -1;
-	while (1)
+	while (this->getSCindex() == 0)
 	{
-		int temp = PressOption(i);
+		PressOption(this->i);
 		setcolor(7);
 		MainScreen(Title, Sell, Statistics, Updates);
 		SwitchChoice(Sell, Statistics, Updates, i);
 	}
+	A = this->result();
+}
+int Main::getI()
+{
+	return this->i;
+}
+int Main::getSCindex()
+{
+	return this->SwitchScreen;
+}
+int Main::result()
+{
+	if (this->getSCindex() == -1) {
+		this->SwitchScreen = 0;
+		return Blank;
+	}
+	else if (this->getSCindex() == 1) {
+		this->SwitchScreen = 0;
+		return this->getI() + 2;
+	}
 }
 // Control ListFilm
+
+void ListFilm::PressOption(int& i)
+{
+
+}
 int ListFilm::UpdateCursor() {
 	int keyBoard = getKeyboard();
 	(keyBoard == 1) ? cursor -= 2 : // UP
@@ -60,73 +86,99 @@ int ListFilm::UpdateCursor() {
 }
 void ListFilm::DisplayListBox(int n) { //n: number of films =>1->n 
 
-	int cursor = UpdateCursor();
+	int cursor = UpdateCursor(); int Height = ConsoleHeight; int Width = ConsoleWidth;
 	if (cursor >= List_first_film + 4) { List_first_film += 2; }
 	else if (cursor < List_first_film) { List_first_film -= 2; }
 
-	DisplayBox(true, Consoleheigth / 6, List_first_film, cursor == List_first_film);
-	DisplayBox(false, Consoleheigth / 6, List_first_film + 1, cursor == List_first_film + 1);
-	DisplayBox(true, Consoleheigth / 1.9, List_first_film + 2, cursor == List_first_film + 2);
-	DisplayBox(false, Consoleheigth / 1.9, List_first_film + 3, cursor == List_first_film + 3);
-	DisplayButton(cursor);
+	DisplayBox(true, Height / 6, List_first_film, cursor == List_first_film);
+	DisplayBox(false, Height / 6, List_first_film + 1, cursor == List_first_film + 1);
+	DisplayBox(true, Height / 1.9, List_first_film + 2, cursor == List_first_film + 2);
+	DisplayBox(false, Height / 1.9, List_first_film + 3, cursor == List_first_film + 3);
+	DisplayButton(cursor, getKeyboard());
 }
 int ListFilm::getKeyboard() {
 	return keyBoard;
 }
-void ListFilm::Control()
+void ListFilm::FilmListScreen()
+{
+	//hello my friend
+	const char* Title = "LIST FILM";
+	int Width = ConsoleWidth; int Height = ConsoleHeight;
+	go(Width / 2 - strlen(Title) / 2, Height / 10);
+	cout << Title;
+	int n = 10;// number of films
+	int i = 1;
+	DisplayListBox(n);
+}
+void ListFilm::Control(int &A)
 {
 	FilmListScreen();
 	int change = 0;
-	while (1) {
-		if (_kbhit()) {
+	while (keyBoard != Enter && keyBoard != Back) {
+		if (_kbhit())
+		{
 			int key = _getch();
 			switch (key) {
 			case 72:
 				change++;
-
 				keyBoard = Up;
 				break;
-			case 80:
+			case 80:  
 				change++;
-
 				keyBoard = Down;
 				break;
 			case 75:
 				change++;
-
 				keyBoard = Left;
 				break;
 			case 77:
 				change++;
-
 				keyBoard = Right;
 				break;
 			case 13:
 				change++;
 				keyBoard = Enter;
+				A = roomInfo;
 				break;
 			case 8:
 				change++;
 				keyBoard = Back;
+				A = mainscreen;
 				break;
 			default:break;
 			}
 		}
 		if (change) { FilmListScreen(); change--; }
 	}
+	if (this->keyBoard == Enter || this->keyBoard == Back)
+	{
+		this->keyBoard = 0;
+	}
 }
-
-
-// Control RoomInfo
-int RoomInfo::PressOption(int &i)
+int ListFilm::getSCindex()
+{
+	return this->SwitchScreen;
+}
+int ListFilm::result()
+{
+	if (this->getSCindex() == -1) {
+		this->SwitchScreen = 0;
+		return mainscreen;
+	}
+	else if (this->getSCindex() == 1) {
+		this->SwitchScreen = 0;
+		return roomInfo;
+	}
+}
+// CONTROL ROOMINFO
+void RoomInfo::PressOption(int &i)
 {
 	char k; k = _getch();
-	//cin >> k;
 	if (k == 'a' || (int)k == 75) i -= 1;
 	if (k == 'd' || (int)k == 77) i += 1;
-	if ((int)k == 13) return 1;
-	if ((int)k == 27) return -1;
-	return 0;
+	//if ((int)k == 13) this->SwitchScreen = 1;
+	if ((int)k == 27) this->SwitchScreen = -1;
+	else this->SwitchScreen = 0;
 }
 int RoomInfo::MoveCursor(int& x, int& y, Location b)
 {
@@ -153,16 +205,21 @@ int RoomInfo::MoveCursor(int& x, int& y, Location b)
 	{
 		go(x, y);  cout << ' ';
 	}
-	else
+	else if ((int)k == 27)
+	{
+		this->SwitchScreen = -1;
+	}
+	else if (k == 'x')
 	{
 		cout << k;
+		if (x + 4 < b.xmax) go(x += 4, y);
 	}
 	return 0;
 }
 void RoomInfo::Cursor(Draw A[], int index)
 {
 	int i = A[index].getLocation().xmin - 2, j = A[index].getLocation().ymin + 1; int k;
-	while (1)
+	while (this->getSCindex() == 0)
 	{
 		k = MoveCursor(i, j, A[index].getLocation());
 		if (k == 1 && index < 2)
@@ -191,45 +248,43 @@ void RoomInfo::SwitchShot()
 {
 
 }
-void RoomInfo::ControlRI()
+void RoomInfo::ControlRI(int& B)
 {
 	Draw A[3];
 	A[0].DrawBoard(75, 13, 7, 13); A[1].DrawBoard(112, 13, 13, 13);
 	A[2].DrawBoard(172, 13, 7, 13); setcursor(true, 10); int index = 0;
 	RoomInfoScreen(); Cursor(A, index); 
 	int i = -1;
-	while (1)
+	while (this->getSCindex() == 0)
 	{
-		int temp = PressOption(i);
+		//PressOption(i);
 		setcolor(7);
 		RoomInfoScreen();
-		if (temp == 1)
-		{
-			break;
-		}
-		else if (temp == -1)
-		{
-			system("cls");
-			Main a;
-			a.ControlMain(); break;
-		}
-		else
-		{
-			system("cls");
-			RoomInfoScreen();
-		}
-
 	}
+	B =  this->result();
 }
-// Control Statistics
-int Stat::PressOption(int& i)
+int RoomInfo::getSCindex()
+{
+	return this->SwitchScreen;
+}
+int RoomInfo::result()
+{
+	if (this->getSCindex() == -1) {
+		this->SwitchScreen = 0;
+		return FilmList;
+	}
+	//else if (this->getSCindex() == 1) 
+}
+// CONTROL STATISTICS
+void Stat::PressOption(int& i)
 {
 	char k; k = _getch();
 	if (k == 'a' || (int)k == 75) i -= 1;
 	if (k == 'd' || (int)k == 77) i += 1;
 	if (i < 0) i = 4;
 	if (i > 4) i = 0;
-	return 0;
+	if ((int)k == 27) this->SwitchScreen = -1;
+	else this->SwitchScreen = 0;
 }
 void Stat::SwitchBar()
 {
@@ -243,14 +298,26 @@ void Stat::GeneralStat()
 {
 
 }
-void Stat::ControlStatistics()
+void Stat::ControlStatistics(int& A)
 {
 	StatisticScreen(); int i = -1;
-	while (1)
+	while (this->getSCindex() == 0)
 	{
 		PressOption(i);
+		//StatisticScreen();
 		BarGraph(i, 10);
-		
+	}
+	A = this->result();
+}
+int Stat::getSCindex()
+{
+	return this->SwitchScreen;
+}
+int Stat::result()
+{
+	if (this->getSCindex() == -1) {
+		this->SwitchScreen = 0;
+		return mainscreen;
 	}
 }
 // Control Update
