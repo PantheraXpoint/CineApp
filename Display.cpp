@@ -1,6 +1,11 @@
 #include "Display.h"
 
+const float PRICE = 5.5;
+int defShot = 0;
+Film newFilm[10];
+
 // Main Screen UI
+
 void AppTitle(int x, int y)
 {
 	go(x, y);
@@ -203,12 +208,12 @@ void screen(Location a)
 void RoomInfoContent()
 {
 	int i = 22;
-	go(20, i); cout << " ROOM ID: "; i += 4;
-	go(20, i); cout << " SHOT NO.: "; i += 4;
-	go(20, i); cout << " START TIME: "; i += 4;
-	go(20, i); cout << " END TIME: "; i += 4;
-	go(20, i); cout << " DURATION: "; i += 4;
-	go(20, i); cout << " AVAILABLE SLOTS: "; i += 4;
+	go(20, i); cout << " ROOM ID: " << newFilm[0].RoomID; i += 4;
+	go(20, i); cout << " SHOT NO.: "<< newFilm[0].FilmShot[defShot].ShotNum; i += 4;
+	go(20, i); cout << " START TIME: "<< newFilm[0].FilmShot[defShot].startHour; i += 4;
+	go(20, i); cout << " END TIME: " << newFilm[0].FilmShot[defShot].endHour; i += 4;
+	go(20, i); cout << " DURATION: " << newFilm[0].Duration; i += 4;
+	go(20, i); cout << " AVAILABLE SLOTS: " << newFilm[0].FilmShot[defShot].getAvail_slots(); i += 4;
 	go(130, 42); cout << "[INSTRUCTION]"; int k = 8;
 	go(72, k); cout << "I"; go(72, ++k); cout << "N";
 	go(72, ++k); cout << "L"; go(72, ++k); cout << "E";

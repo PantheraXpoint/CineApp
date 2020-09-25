@@ -170,3 +170,4 @@ Location Draw::getLocation()
 	this->a.ymax = this->a.ymin + 2 * this->height;
 	return this->a;
 }
+

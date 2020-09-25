@@ -2,6 +2,16 @@
 
 // Control MainScreen
 
+bool CheckBlank(int& x, int& y)
+{
+	for (int i = 0; i < newFilm[0].FilmShot[defShot].seat.size(); i++)
+	{
+		if (x == newFilm[0].FilmShot[defShot].seat[i].x && y == newFilm[0].FilmShot[defShot].seat[i].y)
+			return false;
+	}
+	return true;
+}
+
 void Main::PressOption(int &i)
 {
 	char k; k = _getch();
@@ -203,22 +213,45 @@ int RoomInfo::MoveCursor(int& x, int& y, Location b)
 	}
 	else if (k == 'e')
 	{
-		go(x, y);  cout << ' ';
+		if (!CheckBlank(x, y))
+		{
+			go(x, y);  cout << ' ';
+			for (int i = 0; i < newFilm[0].FilmShot[defShot].seat.size(); i++)
+			{
+				if (x == newFilm[0].FilmShot[defShot].seat[i].x && y == newFilm[0].FilmShot[defShot].seat[i].y)
+					newFilm[0].FilmShot[defShot].seat.erase(newFilm[0].FilmShot[defShot].seat.begin() + i);
+			}
+		}
 	}
 	else if ((int)k == 27)
 	{
+		defShot = 0;
 		this->SwitchScreen = -1;
 	}
 	else if (k == 'x')
 	{
-		cout << k;
-		if (x + 4 < b.xmax) go(x += 4, y);
+		if (CheckBlank(x, y))
+		{
+			cout << k;
+			Seat a; a.x = x; a.y = y;
+			newFilm[0].FilmShot[defShot].seat.push_back(a);
+			if (x + 4 < b.xmax) go(x += 4, y);
+		}
+	}
+	else if ((int)k == 32)
+	{
+		return 2;
 	}
 	return 0;
 }
 void RoomInfo::Cursor(Draw A[], int index)
 {
+	setcolor(7); RoomInfoScreen();
 	int i = A[index].getLocation().xmin - 2, j = A[index].getLocation().ymin + 1; int k;
+	for (int m = 0; m < newFilm[0].FilmShot[defShot].seat.size(); m++)
+	{
+		go(newFilm[0].FilmShot[defShot].seat[m].x, newFilm[0].FilmShot[defShot].seat[m].y);  cout << 'x';
+	}
 	while (this->getSCindex() == 0)
 	{
 		k = MoveCursor(i, j, A[index].getLocation());
@@ -233,6 +266,12 @@ void RoomInfo::Cursor(Draw A[], int index)
 			index--; if (index < 0) index = 0;
 			i = A[index].getLocation().xmax - 2;
 			go(i, j);
+		}
+		else if (k == 2)
+		{
+			if (defShot + 1 < 5) defShot += 1;
+			else defShot = 0;
+			this->SwitchScreen = 1;
 		}
 	}
 }
@@ -253,14 +292,7 @@ void RoomInfo::ControlRI(int& B)
 	Draw A[3];
 	A[0].DrawBoard(75, 13, 7, 13); A[1].DrawBoard(112, 13, 13, 13);
 	A[2].DrawBoard(172, 13, 7, 13); setcursor(true, 10); int index = 0;
-	RoomInfoScreen(); Cursor(A, index); 
-	int i = -1;
-	while (this->getSCindex() == 0)
-	{
-		//PressOption(i);
-		setcolor(7);
-		RoomInfoScreen();
-	}
+	Cursor(A, index);
 	B =  this->result();
 }
 int RoomInfo::getSCindex()
@@ -273,7 +305,11 @@ int RoomInfo::result()
 		this->SwitchScreen = 0;
 		return FilmList;
 	}
-	//else if (this->getSCindex() == 1) 
+	else if (this->getSCindex() == 1)
+	{
+		this->SwitchScreen = 0;
+		return roomInfo;
+	}
 }
 // CONTROL STATISTICS
 void Stat::PressOption(int& i)

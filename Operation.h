@@ -1,6 +1,5 @@
 #include "Control.h"
 
-const float PRICE = 5.5;
 
-void input();
+void input(Film* newFilm);
 void operation();

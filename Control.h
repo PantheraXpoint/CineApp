@@ -1,8 +1,12 @@
 #include "Display.h"
 
 // Control MainScreen
+
 static int cursor = 1;
 static int List_first_film = 1;
+
+bool CheckBlank(int& x, int& y);
+
 class Main
 {
 private:

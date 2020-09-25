@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 enum Screen
 {
 	Blank = 0,
@@ -111,3 +112,10 @@ public:
 };
 
 void DrawRec(int x, int y, int width, int height, int = 7);
+#ifndef __Header_h__
+#define __Header_h__
+extern const float PRICE;
+extern int defShot;
+extern Film newFilm[10];
+#endif
+
