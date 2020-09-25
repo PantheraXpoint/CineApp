@@ -1,11 +1,31 @@
 #include "Display.h"
-
 const float PRICE = 5.5;
 int defShot = 0;
 Film newFilm[10];
 
-// Main Screen UI
 
+void input(Film* newFilm)
+{
+	const char* nameFilm[10] = { "Jurassic","Titanic","Annabelle","Robot", "Conqueror", "Godzilla", "Transformer","Prison Break","Sex Education","Spirited Away" };
+	for (int i = 0; i < 10; i++) {
+		newFilm[i].FilmName = nameFilm[i]; newFilm[i].Description = "Excellent!!"; newFilm[i].Duration = 2;
+		for (int j = 0; j < 5; j++)
+		{
+			if (j == 0)
+			{
+				newFilm[i].FilmShot[j].startHour = 8;
+				newFilm[i].FilmShot[j].endHour = 8 + newFilm[i].Duration;
+			}
+			else
+			{
+				newFilm[i].FilmShot[j].startHour = newFilm[i].FilmShot[j - 1].startHour + newFilm[i].Duration + 1;
+				newFilm[i].FilmShot[j].endHour = newFilm[i].FilmShot[j].startHour + newFilm[i].Duration;
+			}
+		}
+	}
+
+}
+// Main Screen UI
 void AppTitle(int x, int y)
 {
 	go(x, y);
@@ -17,10 +37,10 @@ void AppTitle(int x, int y)
 	cout << "                                                    _|        _|           "; ++y; go(x, y);
 	cout << "                                                    _|        _|           ";
 }
-void SellTicketIcon(Location a, int k )
+void SellTicketIcon(Location a, int k)
 {
 	int x = a.xmin, y = a.ymin;
-	DrawRec(a.xmin - 2, a.ymin - 1, 6, 5,k);
+	DrawRec(a.xmin - 2, a.ymin - 1, 6, 5, k);
 	go(x, y);	setcolor(k);
 	cout << "     '-."; ++y; go(x, y);
 	cout << "        '-. _____"; ++y; go(x, y);
@@ -29,12 +49,12 @@ void SellTicketIcon(Location a, int k )
 	cout << "'-._+      |    .-'"; ++y; go(x, y);
 	cout << " /  |     .'i--i"; ++y; go(x, y);
 	cout << "/    | .-'_/____|___"; ++y; go(x, y);
-	cout << "    .-'  :"; 
+	cout << "    .-'  :";
 }
 void StatisticsIcon(Location a, int k)
 {
 	int x = a.xmin, y = a.ymin;
-	DrawRec(a.xmin - 3, a.ymin - 2, 4, 6,k);
+	DrawRec(a.xmin - 3, a.ymin - 2, 4, 6, k);
 	go(x, y); setcolor(k);
 	cout << " __________"; ++y; go(x, y);
 	cout << "| ________ |"; ++y; go(x, y);
@@ -47,10 +67,10 @@ void StatisticsIcon(Location a, int k)
 	cout << "|[.|O|:][=]|"; ++y; go(x, y);
 	cout << "------------";
 }
-void RoomUpdatesIcon(Location a, int k )
+void RoomUpdatesIcon(Location a, int k)
 {
-	int x = a.xmin, y = a.ymin;	
-	DrawRec(a.xmin - 3, a.ymin - 1, 5, 5,k);
+	int x = a.xmin, y = a.ymin;
+	DrawRec(a.xmin - 3, a.ymin - 1, 5, 5, k);
 	go(x, y); setcolor(k);
 	cout << "      |_|"; ++y; go(x, y);
 	cout << "     (* *)"; ++y; go(x, y);
@@ -59,26 +79,26 @@ void RoomUpdatesIcon(Location a, int k )
 	cout << "   || |_| ||//"; ++y; go(x, y);
 	cout << ">==() | | ()/"; ++y; go(x, y);
 	cout << "    _(___)_"; ++y; go(x, y);
-	cout << "   [-]   [-]"; 
+	cout << "   [-]   [-]";
 }
 
 
-void MainScreen(Location &Title, Location& Sell, Location& Statistics, Location& Updates)
+void MainScreen(Location& Title, Location& Sell, Location& Statistics, Location& Updates)
 {
 	setcolor(7);
 	Border();
 	int Width = ConsoleWidth; int Height = ConsoleHeight;
-	Title.xmin = Width / 2 - 38; 
-	Title.ymin = Height / 5; 
+	Title.xmin = Width / 2 - 38;
+	Title.ymin = Height / 5;
 	AppTitle(Title.xmin, Title.ymin);
-	Sell.xmin = (Width - 16 - 17 - 24) / 4; 
-	Sell.ymin = Title.ymin + 6 + 7; 
+	Sell.xmin = (Width - 16 - 17 - 24) / 4;
+	Sell.ymin = Title.ymin + 6 + 7;
 	SellTicketIcon(Sell);
-	Statistics.xmin = Sell.xmin + 23 + (Width - 16 - 17 - 24) / 4; 
-	Statistics.ymin = Title.ymin + 6 + 7; 
+	Statistics.xmin = Sell.xmin + 23 + (Width - 16 - 17 - 24) / 4;
+	Statistics.ymin = Title.ymin + 6 + 7;
 	StatisticsIcon(Statistics);
 	Updates.xmin = (Width - 16 - 17 - 24) / 4 + Statistics.xmin + 15;
-	Updates.ymin = Title.ymin + 6 + 7; 
+	Updates.ymin = Title.ymin + 6 + 7;
 	RoomUpdatesIcon(Updates);
 	go(Sell.xmin + 23, Sell.ymin + 20); setcolor(7);
 	cout << "PRESS '<' and '>' for moving ||||||| PRESS [ENTER] for choosing\n";
@@ -106,15 +126,14 @@ void DisplayBox(bool side, int posY, int filmth, bool highLight) {// create a bo
 	}
 	int posXfilm = 0;
 	int posYfilm = 0;
-
-	char** l = new char* [5];
-	l[0] = new char[4];
-	const char* p[6] = { "Name:" ,"Start:","End:", "Duration:", "Available slots:", "Desc:" };
-	for (int i = 0; i < 6; i++) {
-		if (i < 3) posXfilm = posX + width / 3;
-		else posXfilm = posX + 2 * width / 3;
+	const char* p[3] = { "Name:" , "Duration:",  "Desc:" };
+	for (int i = 0; i < 3; i++) {
+		posXfilm = posX + width / 3;
 		go(posXfilm, posY + (i % 3 + 1) * height / 4);
 		cout << p[i];
+		if (i == 0)cout << newFilm[filmth - 1].FilmName;
+		else if (i == 1) cout << newFilm[filmth - 1].Duration;
+		else cout << newFilm[filmth - 1].Description;
 	}
 	go(posX + width / 6, posY + height / 2);
 	cout << filmth;
@@ -159,29 +178,29 @@ void Border()
 	int Width = ConsoleWidth; int Height = ConsoleHeight;
 	int x = 0, y = 0;
 	go(x, y);
-	cout << " __| |"; 
+	cout << " __| |";
 	for (int i = 0; i < Width - 11; i++) cout << "_";
-	cout <<"| |__"; go(x, ++y);
+	cout << "| |__"; go(x, ++y);
 	cout << "(__   ";
-	for (int i = 0; i < Width - 11 ; i++) cout << "_";
+	for (int i = 0; i < Width - 11; i++) cout << "_";
 	cout << "   __)"; go(x, ++y);
 	for (int i = 0; i < Height - 4; i++)
 	{
 		cout << "   | |";
-		go(Width - 5,y);
+		go(Width - 5, y);
 		cout << "| |"; go(x, ++y);
 	}
 	cout << " __| |";
 	for (int i = 0; i < Width - 11; i++) cout << "_";
 	cout << "| |__"; go(x, ++y);
-	cout << "(__   "; 
+	cout << "(__   ";
 	for (int i = 0; i < Width - 11; i++) cout << "_";
 	cout << "   __)"; go(x, ++y);
 	cout << "   | |";
 	for (int i = 0; i < Width - 11; i++) cout << " ";
 	cout << "| |"; go(x, ++y);
 }
-void RoomInfoIcon(Location a,Location b)
+void RoomInfoIcon(Location a, Location b)
 {
 	int x = a.xmin, y = a.ymin;
 	go(x, y);
@@ -209,8 +228,8 @@ void RoomInfoContent()
 {
 	int i = 22;
 	go(20, i); cout << " ROOM ID: " << newFilm[0].RoomID; i += 4;
-	go(20, i); cout << " SHOT NO.: "<< newFilm[0].FilmShot[defShot].ShotNum; i += 4;
-	go(20, i); cout << " START TIME: "<< newFilm[0].FilmShot[defShot].startHour; i += 4;
+	go(20, i); cout << " SHOT NO.: " << newFilm[0].FilmShot[defShot].ShotNum; i += 4;
+	go(20, i); cout << " START TIME: " << newFilm[0].FilmShot[defShot].startHour; i += 4;
 	go(20, i); cout << " END TIME: " << newFilm[0].FilmShot[defShot].endHour; i += 4;
 	go(20, i); cout << " DURATION: " << newFilm[0].Duration; i += 4;
 	go(20, i); cout << " AVAILABLE SLOTS: " << newFilm[0].FilmShot[defShot].getAvail_slots(); i += 4;
@@ -237,7 +256,7 @@ void FrameDecor()
 	{
 		go(i, 6); cout << "_";
 	}
-	
+
 }
 void Arrow(Location a)
 {
@@ -248,16 +267,16 @@ void Arrow(Location a)
 }
 void RoomInfoScreen()
 {
-	Location Room,Info,Screen; Room.xmin = 20; Room.ymin = 3;
+	Location Room, Info, Screen; Room.xmin = 20; Room.ymin = 3;
 	Info.xmin = 10; Info.ymin = 8; Screen.xmin = 120; Screen.ymin = 2;
 	Location arrow1; arrow1.xmin = 75; arrow1.ymin = 9;
 	Location arrow2; arrow2.xmin = 188; arrow2.ymin = 9;
-	RoomInfoIcon(Room,Info);
+	RoomInfoIcon(Room, Info);
 	screen(Screen);
-	Arrow(arrow1); Arrow(arrow2);																																																													
+	Arrow(arrow1); Arrow(arrow2);
 	DrawRec(17, 19, 10, 13); DrawRec(87, 41, 25, 3);
 	DrawRec(201, 7, 1, 3); DrawRec(70, 7, 1, 3);
-	RoomInfoContent(); FrameDecor(); Border();																																	
+	RoomInfoContent(); FrameDecor(); Border();
 }
 
 // Statistics Screen
@@ -309,7 +328,7 @@ void BarGraph(int bar, int color)
 	{
 		go(i, Height - 12); cout << "-";
 	}
-	if (bar == 1) DrawRec(100, Height - 16, 3, 5,color);
+	if (bar == 1) DrawRec(100, Height - 16, 3, 5, color);
 	else DrawRec(100, Height - 16, 3, 5);
 	for (int i = 71; i < 100; i++)
 	{
@@ -453,7 +472,7 @@ void UpdateRoomScreen()
 	DrawRec(60, 41, 25, 3);
 	go(105, 42); cout << "[INSTRUCTION]";
 	UpdateRoomIcon(Update); Border();
-	
+
 }
 
 // Confirmation Screen

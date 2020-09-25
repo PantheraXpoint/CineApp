@@ -1,7 +1,6 @@
 #include "Control.h"
 
 // Control MainScreen
-
 bool CheckBlank(int& x, int& y)
 {
 	for (int i = 0; i < newFilm[0].FilmShot[defShot].seat.size(); i++)
@@ -12,7 +11,7 @@ bool CheckBlank(int& x, int& y)
 	return true;
 }
 
-void Main::PressOption(int &i)
+void Main::PressOption(int& i)
 {
 	char k; k = _getch();
 	if (k == 'a' || (int)k == 75) i -= 1;
@@ -23,7 +22,7 @@ void Main::PressOption(int &i)
 	else if ((int)k == 27) this->SwitchScreen = -1;
 	else this->SwitchScreen = 0;
 }
-void Main::SwitchChoice(Location& Sell, Location& Statistics, Location& Updates, int &i)
+void Main::SwitchChoice(Location& Sell, Location& Statistics, Location& Updates, int& i)
 {
 	Location Highlight[3];
 	Highlight[0].xmin = 50; Highlight[0].ymin = 30;
@@ -51,7 +50,7 @@ void Main::SwitchChoice(Location& Sell, Location& Statistics, Location& Updates,
 void Main::ControlMain(int& A)
 {
 	Location Title, Sell, Statistics, Updates;
-	MainScreen(Title, Sell, Statistics, Updates); 
+	MainScreen(Title, Sell, Statistics, Updates);
 	while (this->getSCindex() == 0)
 	{
 		PressOption(this->i);
@@ -86,20 +85,24 @@ void ListFilm::PressOption(int& i)
 {
 
 }
-int ListFilm::UpdateCursor() {
+void ListFilm::UpdateCursor(int n) {
 	int keyBoard = getKeyboard();
 	(keyBoard == 1) ? cursor -= 2 : // UP
 		(keyBoard == 2) ? cursor += 2 ://DOWN
 		(keyBoard == 3) ? cursor-- ://LEFT
 		(keyBoard == 4) ? cursor++ : cursor = cursor;//RIGHT
-	return cursor;
+	cursor = (cursor <= 0) ? 1 : cursor;
+	cursor = (cursor > n) ? n : cursor;
+	List_first_film = (List_first_film <= 0) ? 1 : List_first_film;
+	List_first_film = (List_first_film > n) ? n : List_first_film;
+	if (cursor >= List_first_film + 4) { List_first_film += 2; }
+	else if (cursor < List_first_film) { List_first_film -= 2; }
 }
 void ListFilm::DisplayListBox(int n) { //n: number of films =>1->n 
 
-	int cursor = UpdateCursor(); int Height = ConsoleHeight; int Width = ConsoleWidth;
-	if (cursor >= List_first_film + 4) { List_first_film += 2; }
-	else if (cursor < List_first_film) { List_first_film -= 2; }
-
+	UpdateCursor(n);
+	int Height = ConsoleHeight;
+	int Width = ConsoleWidth;
 	DisplayBox(true, Height / 6, List_first_film, cursor == List_first_film);
 	DisplayBox(false, Height / 6, List_first_film + 1, cursor == List_first_film + 1);
 	DisplayBox(true, Height / 1.9, List_first_film + 2, cursor == List_first_film + 2);
@@ -111,16 +114,22 @@ int ListFilm::getKeyboard() {
 }
 void ListFilm::FilmListScreen()
 {
-	//hello my friend
-	const char* Title = "LIST FILM";
 	int Width = ConsoleWidth; int Height = ConsoleHeight;
-	go(Width / 2 - strlen(Title) / 2, Height / 10);
-	cout << Title;
+	setcolor(5);
+	//hello my friend
+	go((Width - 57) / 2, 0);
+	cout << " __    ____   ___  ____    ____   ____  __      __   __";
+	go((Width - 57) / 2, 1);
+	cout << "(  )  (_  _) / __)(_  _)  (___ ) (_  _)(  )    (  |_/  )";
+	go((Width - 57) / 2, 2);
+	cout << " )(__  _)(_  |__ |  )(     )__)   _)(_  )(__    )  _  (";
+	go((Width - 57) / 2, 3);
+	cout << "(____)(____)(___ / (__)   (__)   (____)(____) (__/   |_)";
 	int n = 10;// number of films
 	int i = 1;
 	DisplayListBox(n);
 }
-void ListFilm::Control(int &A)
+void ListFilm::Control(int& A)
 {
 	FilmListScreen();
 	int change = 0;
@@ -133,7 +142,7 @@ void ListFilm::Control(int &A)
 				change++;
 				keyBoard = Up;
 				break;
-			case 80:  
+			case 80:
 				change++;
 				keyBoard = Down;
 				break;
@@ -181,7 +190,7 @@ int ListFilm::result()
 	}
 }
 // CONTROL ROOMINFO
-void RoomInfo::PressOption(int &i)
+void RoomInfo::PressOption(int& i)
 {
 	char k; k = _getch();
 	if (k == 'a' || (int)k == 75) i -= 1;
@@ -293,7 +302,7 @@ void RoomInfo::ControlRI(int& B)
 	A[0].DrawBoard(75, 13, 7, 13); A[1].DrawBoard(112, 13, 13, 13);
 	A[2].DrawBoard(172, 13, 7, 13); setcursor(true, 10); int index = 0;
 	Cursor(A, index);
-	B =  this->result();
+	B = this->result();
 }
 int RoomInfo::getSCindex()
 {
@@ -305,6 +314,7 @@ int RoomInfo::result()
 		this->SwitchScreen = 0;
 		return FilmList;
 	}
+	//else if (this->getSCindex() == 1) 
 	else if (this->getSCindex() == 1)
 	{
 		this->SwitchScreen = 0;

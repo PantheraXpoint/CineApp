@@ -2,8 +2,7 @@
 #define ConsoleWidth 210;
 #define ConsoleHeight 50;
 
-
-
+void input(Film* newFilm);
 // Main Screen UI
 void AppTitle(int x, int y);
 void SellTicketIcon(Location a, int = 7);
@@ -18,7 +17,7 @@ void DisplayButton(int _cursor, int KeyBoard);
 
 // Room Detail Screen
 void Border();
-void RoomInfoIcon(Location a,Location b);
+void RoomInfoIcon(Location a, Location b);
 void screen(Location a);
 void RoomInfoContent();
 void FrameDecor();

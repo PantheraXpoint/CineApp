@@ -119,3 +119,5 @@ extern int defShot;
 extern Film newFilm[10];
 #endif
 
+static int cursor = 1;
+static int List_first_film = 1;
