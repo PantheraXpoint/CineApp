@@ -108,7 +108,7 @@ bool YN_Check_Box(int where_x, int where_y)
 	return !side;
 }
 
-void Draw::DrawBoard(int x, int y, int width, int height)
+void Draw::DrawBoard(int x, int y, int width, int height,int color)
 {
 	string str1, str2, str3, str4; str1.push_back(char(218));
 	str2.push_back(char(179)); str3.push_back(char(195)); str4.push_back(char(192));
@@ -138,7 +138,7 @@ void Draw::DrawBoard(int x, int y, int width, int height)
 		else str.push_back(str2);
 	}
 	str.push_back(str4);
-	DynamicPrintString(x, y, str);
+	DynamicPrintString(x, y, str,color);
 	this->a.xmin = x; this->a.ymin = y;
 	this->height = height; this->width = width;
 }

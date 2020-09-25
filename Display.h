@@ -2,7 +2,7 @@
 #define ConsoleWidth 210;
 #define ConsoleHeight 50;
 
-
+void input(Film* newFilm);
 
 // Main Screen UI
 void AppTitle(int x, int y);
@@ -28,6 +28,7 @@ void RoomInfoScreen();
 // Statistics Screen
 void BarFrame();
 void Border2(int x, int y, int Width, int Height);
+void Content(int index);
 void BarGraph(int bar, int color);
 void StatisticsLetter(Location a);
 void StatisticScreen();

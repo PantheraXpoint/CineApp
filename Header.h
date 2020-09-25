@@ -36,6 +36,7 @@ struct Shot
 {
 	vector<Seat> seat; 
 	static int ShotNumcounter;
+	float Revenue = 0;
 	int ShotNum;
 	int startHour = 0;
 	int endHour = 0;
@@ -51,6 +52,7 @@ struct Shot
 struct Film
 {
 	Shot FilmShot[5];
+	float Revenue = 0;
 	string FilmName;
 	string Description;
 	int Duration;
@@ -107,7 +109,7 @@ private:
 	int width, height;
 	Location a;
 public:
-	void DrawBoard(int x, int y, int width, int height);
+	void DrawBoard(int x, int y, int width, int height, int color);
 	Location getLocation();
 };
 
@@ -116,6 +118,8 @@ void DrawRec(int x, int y, int width, int height, int = 7);
 #define __Header_h__
 extern const float PRICE;
 extern int defShot;
+//extern int defFilm
 extern Film newFilm[10];
+extern int RankIndex[5];
 #endif
 

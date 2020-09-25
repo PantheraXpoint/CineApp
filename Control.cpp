@@ -11,7 +11,50 @@ bool CheckBlank(int& x, int& y)
 	}
 	return true;
 }
+bool Check(int x, int A)
+{
+	for (int j = 0; j < A; j++)
+	{
+		if (x == newFilm[RankIndex[j]].Revenue)  return true;
+	}
+	return false;
+}
+void setRankIndex()
+{
+	int A = 4; int i;
+	while (A >= 0)
+	{
+		int max = 0;
+		for (i = 0; i < 10; i++)
+		{
+			if (A == 0)
+			{
+				if (newFilm[i].Revenue > max) max = newFilm[i].Revenue;
+			}
+			else
+			{
+				if (newFilm[i].Revenue > max && Check(newFilm[i].Revenue,A) == false)
+				{
+					max = newFilm[i].Revenue;
+				}
+			}
+		}
+		RankIndex[A] = i;
+		A--;
+	}
+}
 
+void calcRevenue()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			newFilm[i].FilmShot[j].Revenue = newFilm[i].FilmShot[j].seat.size() * PRICE;
+			newFilm[i].Revenue += newFilm[i].FilmShot[j].Revenue;
+		}
+	}
+}
 void Main::PressOption(int &i)
 {
 	char k; k = _getch();
@@ -235,7 +278,7 @@ int RoomInfo::MoveCursor(int& x, int& y, Location b)
 			cout << k;
 			Seat a; a.x = x; a.y = y;
 			newFilm[0].FilmShot[defShot].seat.push_back(a);
-			if (x + 4 < b.xmax) go(x += 4, y);
+			if (x + 4 < b.xmax) go(x, y);
 		}
 	}
 	else if ((int)k == 32)
@@ -290,8 +333,8 @@ void RoomInfo::SwitchShot()
 void RoomInfo::ControlRI(int& B)
 {
 	Draw A[3];
-	A[0].DrawBoard(75, 13, 7, 13); A[1].DrawBoard(112, 13, 13, 13);
-	A[2].DrawBoard(172, 13, 7, 13); setcursor(true, 10); int index = 0;
+	A[0].DrawBoard(75, 13, 7, 13,3); A[1].DrawBoard(112, 13, 13, 13,3);
+	A[2].DrawBoard(172, 13, 7, 13,3); setcursor(true, 10); int index = 0;
 	Cursor(A, index);
 	B =  this->result();
 }
@@ -341,7 +384,8 @@ void Stat::ControlStatistics(int& A)
 	{
 		PressOption(i);
 		//StatisticScreen();
-		BarGraph(i, 10);
+		BarGraph(i, 11);
+		Content(i);
 	}
 	A = this->result();
 }
