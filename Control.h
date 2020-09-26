@@ -2,6 +2,18 @@
 
 // Control MainScreen
 bool CheckBlank(int& x, int& y);
+
+static int cursor = 1;
+static int List_first_film = 1;
+
+
+bool CheckBlank(int& x, int& y);
+
+bool Check(int x, int A);
+void setRankIndex();
+
+void calcRevenue();
+
 class Main
 {
 private:

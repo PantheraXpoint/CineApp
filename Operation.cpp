@@ -1,11 +1,13 @@
 #include "Operation.h"
 
+
 void operation()
 {
 	input(newFilm);
 	int A = 1; Main a; Stat c; RoomInfo d; ListFilm b;
 	while (A != 0)
 	{
+		calcRevenue();
 		switch (A)
 		{
 		case Blank:

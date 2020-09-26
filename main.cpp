@@ -1,16 +1,12 @@
-﻿#include "Operation.h"
+﻿#include"Operation.h"
 
 int Shot::ShotNumcounter = 1;
 int Film::RoomIDcounter = 1;
-int main(void)
+
+int main()
 {
-	
-	//FixConsoleWindow();
-	input(newFilm);
-	for (int i = 0; i < 10; i++)
-	{
-		cout << newFilm[i].FilmName << ' ';
-	}
+	FixConsoleWindow();
+	operation();
 	system("pause");
 	return 0;
 }
